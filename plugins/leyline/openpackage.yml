@@ -1,0 +1,39 @@
+name: leyline
+version: 1.6.5
+description: Infrastructure and pipeline building blocks for Claude Code plugins. Like ancient ley lines connecting sacred
+  sites, leyline provides the foundational patterns that connect and power plugin ecosystems.
+keywords:
+- infrastructure
+- pipeline
+- building-blocks
+- shared-utilities
+- cross-plugin
+- quota
+- logging
+- service-registry
+author:
+  name: Alex Thola
+  url: https://github.com/athola
+license: MIT
+skills:
+- skills/authentication-patterns
+- skills/content-sanitization
+- skills/damage-control
+- skills/error-patterns
+- skills/evaluation-framework
+- skills/git-platform
+- skills/markdown-formatting
+- skills/progressive-loading
+- skills/pytest-config
+- skills/quota-management
+- skills/risk-classification
+- skills/service-registry
+- skills/stewardship
+- skills/storage-templates
+- skills/testing-quality-standards
+- skills/usage-logging
+commands:
+- commands/reinstall-all-plugins.md
+- commands/update-all-plugins.md
+- commands/verify-plugin.md
+hooks: hooks/hooks.json

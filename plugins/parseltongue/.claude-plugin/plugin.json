@@ -1,0 +1,39 @@
+{
+  "name": "parseltongue",
+  "version": "1.6.5",
+  "description": "Modern Python development suite - testing, performance optimization, async patterns, and packaging",
+  "commands": [
+    "./commands/analyze-tests.md",
+    "./commands/check-async.md",
+    "./commands/run-profiler.md"
+  ],
+  "skills": [
+    "./skills/python-testing",
+    "./skills/python-performance",
+    "./skills/python-async",
+    "./skills/python-packaging"
+  ],
+  "agents": [
+    "./agents/python-linter.md",
+    "./agents/python-optimizer.md",
+    "./agents/python-pro.md",
+    "./agents/python-tester.md"
+  ],
+  "keywords": [
+    "python",
+    "testing",
+    "pytest",
+    "performance",
+    "optimization",
+    "async",
+    "asyncio",
+    "packaging",
+    "uv",
+    "profiling"
+  ],
+  "author": {
+    "name": "Alex Thola",
+    "url": "https://github.com/athola"
+  },
+  "license": "MIT"
+}

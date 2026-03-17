@@ -1,0 +1,109 @@
+# Claude sessions
+.claude/session-*
+.claude/settings.local.json
+*.txt
+
+# Python
+**/*/__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.lock
+
+# Virtual environments
+.venv/
+.*-venv/
+.*-env/
+venv/
+ENV/
+.uv-cache/
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+.tools/
+
+# Type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Linting
+.ruff_cache/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node.js (local dev tools only)
+node_modules/
+package.json
+package-lock.json
+
+# Build artifacts
+*.log
+
+# Generated reports and scans
+debt_scan_results.json
+.demo-palaces/
+
+# local docs
+docs/plans/
+docs/backlog/
+docs/archive/
+docs/marketing/
+docs/implementation-plan.md
+docs/project-brief.md
+docs/specification.md
+**/*/docs/plans/
+
+# Attune ephemeral state
+.attune/
+
+# Git worktrees
+.worktrees/
+
+# Attune calibration data
+.attune/
+
+# Intake queue for memory palace artifacts
+plugins/memory-palace/data/intake_queue.jsonl
+plugins/memory-palace/data/state/
+plugins/memory-palace/.demo-palaces/
+plugins/memory-palace/reports/
+
+# Wiki-backed knowledge corpus (local clone, not committed to main repo)
+plugins/memory-palace/data/wiki/
+
+# Auto-captured research staging (local evaluation before promotion to wiki)
+plugins/memory-palace/data/staging/webfetch-*.md
+plugins/memory-palace/data/staging/websearch-*.md
+plugins/memory-palace/data/staging/archive/
+**/*.claude/session-state.md

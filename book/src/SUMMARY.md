@@ -1,0 +1,58 @@
+# Summary
+
+[Introduction](introduction.md)
+
+# Getting Started
+
+- [Overview](getting-started/README.md)
+- [Installation](getting-started/installation.md)
+- [Your First Plugin](getting-started/first-plugin.md)
+- [Quick Start Guide](getting-started/quick-start.md)
+- [Common Workflows](getting-started/common-workflows.md)
+- [Migration Guide](getting-started/migration-guide.md)
+
+# Plugins
+
+- [Plugin Overview](plugins/README.md)
+- [Meta Layer](plugins/meta-layer.md)
+  - [abstract](plugins/abstract.md)
+- [Foundation Layer](plugins/foundation-layer.md)
+  - [imbue](plugins/imbue.md)
+  - [sanctum](plugins/sanctum.md)
+  - [leyline](plugins/leyline.md)
+- [Utility Layer](plugins/utility-layer.md)
+  - [conserve](plugins/conserve.md)
+  - [conjure](plugins/conjure.md)
+  - [hookify](plugins/hookify.md)
+  - [egregore](plugins/egregore.md)
+- [Domain Specialists](plugins/domain-specialists.md)
+  - [archetypes](plugins/archetypes.md)
+  - [pensive](plugins/pensive.md)
+  - [parseltongue](plugins/parseltongue.md)
+  - [memory-palace](plugins/memory-palace.md)
+  - [spec-kit](plugins/spec-kit.md)
+  - [minister](plugins/minister.md)
+  - [attune](plugins/attune.md)
+  - [scribe](plugins/scribe.md)
+  - [scry](plugins/scry.md)
+
+# Tutorials
+
+- [Tutorial Overview](tutorials/README.md)
+- [Your First Session](tutorials/skills-showcase.md)
+- [Feature Development Lifecycle](tutorials/feature-lifecycle.md)
+- [Code Review and PR Workflow](tutorials/code-review-pr-workflow.md)
+- [Debugging and Issue Resolution](tutorials/debugging-issues.md)
+- [Memory Palace: Knowledge Management](tutorials/memory-palace-knowledge.md)
+
+# Reference
+
+- [Capabilities Reference](reference/capabilities-reference.md)
+- [Commands — Core Plugins](reference/capabilities-commands.md)
+- [Commands — Extended Plugins](reference/capabilities-commands-extended.md)
+- [Superpowers Integration](reference/superpowers-integration.md)
+- [Function Extraction Guidelines](reference/function-extraction-guidelines.md)
+
+# Achievement System
+
+- [Your Progress](achievements/README.md)

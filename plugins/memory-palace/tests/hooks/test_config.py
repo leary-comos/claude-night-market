@@ -1,0 +1,203 @@
+"""Tests for config module."""
+
+from __future__ import annotations
+
+import os
+import sys
+
+# Add hooks to path for testing
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../hooks"))
+
+import shared.config as config_module
+from shared.config import (
+    CONFIG_DEFAULTS,
+    get_config,
+    is_knowledge_path,
+    is_path_excluded,
+    is_path_safe,
+    should_process_path,
+)
+
+
+class TestConfigDefaults:
+    """Tests for default configuration values."""
+
+    def test_defaults_exist(self) -> None:
+        """Default config should have required keys."""
+        assert "enabled" in CONFIG_DEFAULTS
+        assert "local_knowledge_paths" in CONFIG_DEFAULTS
+        assert "exclude_patterns" in CONFIG_DEFAULTS
+        assert "safety" in CONFIG_DEFAULTS
+
+    def test_safety_defaults(self) -> None:
+        """Safety settings should have sensible defaults."""
+        safety = CONFIG_DEFAULTS["safety"]
+        assert safety["max_content_size_kb"] > 0
+        assert safety["max_line_length"] > 0
+        assert safety["parsing_timeout_ms"] > 0
+
+
+class TestGetConfig:
+    """Tests for config loading."""
+
+    def test_returns_dict(self) -> None:
+        """Config should return a dictionary."""
+        config = get_config()
+        assert isinstance(config, dict)
+
+    def test_has_required_keys(self) -> None:
+        """Config should have all required keys."""
+        config = get_config()
+        assert "enabled" in config
+        assert "local_knowledge_paths" in config
+        assert "safety" in config
+
+
+class TestIsPathExcluded:
+    """Tests for path exclusion logic."""
+
+    def test_git_excluded(self) -> None:
+        """Git directories should be excluded."""
+        assert is_path_excluded(".git/config")
+        assert is_path_excluded("project/.git/HEAD")
+
+    def test_node_modules_excluded(self) -> None:
+        """node_modules should be excluded."""
+        assert is_path_excluded("node_modules/package/index.js")
+
+    def test_venv_excluded(self) -> None:
+        """Virtual environments should be excluded."""
+        assert is_path_excluded(".venv/lib/python3.11/site.py")
+        assert is_path_excluded("venv/bin/activate")
+
+    def test_env_files_excluded(self) -> None:
+        """Environment files should be excluded."""
+        assert is_path_excluded(".env")
+        assert is_path_excluded(".env.local")
+
+    def test_lock_files_excluded(self) -> None:
+        """Lock files should be excluded."""
+        assert is_path_excluded("package-lock.json")
+        assert is_path_excluded("uv.lock")
+        assert is_path_excluded("poetry.lock")
+
+    def test_normal_paths_not_excluded(self) -> None:
+        """Normal paths should not be excluded."""
+        assert not is_path_excluded("docs/readme.md")
+        assert not is_path_excluded("src/main.py")
+
+
+class TestIsKnowledgePath:
+    """Tests for knowledge path detection."""
+
+    def test_docs_is_knowledge(self) -> None:
+        """docs/ should be a knowledge path."""
+        assert is_knowledge_path("docs/guide.md")
+        assert is_knowledge_path("docs/api/reference.md")
+
+    def test_knowledge_corpus_under_docs_is_knowledge(self) -> None:
+        """docs/ subdirectories should be recognized as knowledge paths."""
+        assert is_knowledge_path("docs/knowledge-corpus/article.md")
+
+    def test_bare_knowledge_corpus_not_knowledge(self) -> None:
+        """knowledge-corpus/ was removed in 1.5.0; no longer a knowledge path."""
+        assert not is_knowledge_path("knowledge-corpus/article.md")
+
+    def test_references_is_knowledge(self) -> None:
+        """references/ should be a knowledge path."""
+        assert is_knowledge_path("references/paper.md")
+
+    def test_src_not_knowledge(self) -> None:
+        """src/ should not be a knowledge path."""
+        assert not is_knowledge_path("src/main.py")
+
+    def test_random_files_not_knowledge(self) -> None:
+        """Random files should not be knowledge paths."""
+        assert not is_knowledge_path("README.md")
+        assert not is_knowledge_path("config.yaml")
+
+
+class TestIsPathSafe:
+    """Tests for path traversal validation."""
+
+    def test_normal_path_safe(self) -> None:
+        """Normal paths should be safe."""
+        assert is_path_safe("/home/user/docs/file.md")
+        assert is_path_safe("docs/guide.md")
+
+    def test_traversal_unsafe(self) -> None:
+        """Path traversal attempts should be unsafe."""
+        assert not is_path_safe("../../../etc/passwd")
+        assert not is_path_safe("docs/../../../etc/passwd")
+
+    def test_sensitive_paths_unsafe(self) -> None:
+        """Sensitive system paths should be unsafe."""
+        assert not is_path_safe("/etc/passwd")
+        assert not is_path_safe("/root/.bashrc")
+        assert not is_path_safe("/var/log/syslog")
+
+
+class TestShouldProcessPath:
+    """Tests for combined processing decision."""
+
+    def test_knowledge_path_processed(self) -> None:
+        """Knowledge paths should be processed."""
+        assert should_process_path("docs/guide.md")
+
+    def test_excluded_not_processed(self) -> None:
+        """Excluded paths should not be processed."""
+        assert not should_process_path(".git/config")
+        assert not should_process_path("node_modules/readme.md")
+
+    def test_non_knowledge_not_processed(self) -> None:
+        """Non-knowledge paths should not be processed."""
+        assert not should_process_path("src/main.py")
+
+    def test_traversal_not_processed(self) -> None:
+        """Path traversal should not be processed."""
+        assert not should_process_path("docs/../../etc/passwd")
+
+    def test_excluded_knowledge_not_processed(self) -> None:
+        """Excluded paths in knowledge dirs should not be processed."""
+        # If there was a .env in docs, it should still be excluded
+        assert not should_process_path("docs/.env")
+
+
+class TestYamlUnavailable:
+    """Tests for graceful degradation when pyyaml is not installed."""
+
+    def setup_method(self) -> None:
+        """Reset config cache before each test."""
+        config_module._config_cache = None
+        config_module._config_mtime = 0
+
+    def teardown_method(self) -> None:
+        """Reset config cache after each test."""
+        config_module._config_cache = None
+        config_module._config_mtime = 0
+
+    def test_get_config_returns_defaults_when_yaml_unavailable(
+        self, monkeypatch: object
+    ) -> None:
+        """When yaml is None, get_config should return CONFIG_DEFAULTS."""
+        monkeypatch.setattr(config_module, "yaml", None)
+        result = get_config()
+        assert result == CONFIG_DEFAULTS
+        assert result["enabled"]
+        assert result["research_mode"] == "cache_first"
+
+    def test_get_config_caches_defaults_when_yaml_unavailable(
+        self, monkeypatch: object
+    ) -> None:
+        """When yaml is None, repeated calls should return cached defaults."""
+        monkeypatch.setattr(config_module, "yaml", None)
+        result1 = get_config()
+        result2 = get_config()
+        assert result1 is result2  # Same object from cache
+
+    def test_path_functions_work_with_default_config(self, monkeypatch: object) -> None:
+        """Path utility functions should work with default-only config."""
+        monkeypatch.setattr(config_module, "yaml", None)
+        assert is_path_excluded(".git/config")
+        assert is_knowledge_path("docs/guide.md")
+        assert should_process_path("docs/guide.md")

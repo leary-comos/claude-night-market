@@ -1,0 +1,68 @@
+# Category: Decisions (Announcement format)
+# Requires manual category creation: Settings → Discussions → New Category
+#   Name: Decisions | Format: Announcement | Description: War room outcomes and ADR-style decision records
+title: "[Decision] "
+labels:
+  - "decision"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Decision Record
+        Document a deliberated decision for cross-session reference.
+  - type: dropdown
+    id: status
+    attributes:
+      label: Status
+      description: Current status of this decision
+      options:
+        - Accepted
+        - Superseded
+        - Deprecated
+        - Under Review
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: What situation or problem prompted this decision?
+      placeholder: Describe the background, constraints, and forces at play.
+    validations:
+      required: true
+  - type: textarea
+    id: decision
+    attributes:
+      label: Decision
+      description: What was decided?
+      placeholder: We will use / adopt / implement...
+    validations:
+      required: true
+  - type: textarea
+    id: consequences
+    attributes:
+      label: Consequences
+      description: What are the positive, negative, and neutral consequences of this decision?
+      placeholder: |
+        Positive: ...
+        Negative: ...
+        Neutral: ...
+    validations:
+      required: true
+  - type: dropdown
+    id: reversibility-score
+    attributes:
+      label: Reversibility Score
+      description: "War room RS score. Higher = less reversible."
+      options:
+        - "0.00 - 0.20 (trivially reversible)"
+        - "0.21 - 0.40 (easily reversible)"
+        - "0.41 - 0.60 (moderate effort to reverse)"
+        - "0.61 - 0.80 (difficult to reverse)"
+        - "0.81 - 1.00 (practically irreversible)"
+  - type: input
+    id: related
+    attributes:
+      label: Related PRs/Issues
+      description: "Link related PRs, issues, or prior decisions (e.g., #42, #103)"
+      placeholder: "#42, #103"
